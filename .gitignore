@@ -11,3 +11,12 @@ wheels/
 
 # Environment variables (local secrets)
 .env
+
+# Database
+db.sqlite3
+
+# Media files (user uploads + imagekit cache)
+media/
+
+# Collected static files
+staticfiles/
