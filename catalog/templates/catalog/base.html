@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo de Cascos</title>
+    <link rel="icon" type="image/png" href="{{ MEDIA_URL }}products/icono_casco.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -119,6 +120,35 @@
             </div>
         </div>
     </footer>
+
+    <!-- Dropdown Script -->
+    <script>
+        document.addEventListener('click', function (e) {
+            document.querySelectorAll('.dropdown-menu:not(.hidden)').forEach(function (menu) {
+                var container = menu.closest('.dropdown-container');
+                if (container && !container.contains(e.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+        });
+
+        function toggleDropdown(menuId) {
+            var menu = document.getElementById(menuId);
+            document.querySelectorAll('.dropdown-menu:not(.hidden)').forEach(function (m) {
+                if (m.id !== menuId) m.classList.add('hidden');
+            });
+            menu.classList.toggle('hidden');
+        }
+
+        function selectOption(selectId, value, label, menuId) {
+            var select = document.getElementById(selectId);
+            var labelEl = document.getElementById(menuId + '-label');
+            select.value = value;
+            labelEl.textContent = label;
+            document.getElementById(menuId).classList.add('hidden');
+            htmx.trigger(select, 'change');
+        }
+    </script>
 
 </body>
 
