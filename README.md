@@ -10,8 +10,7 @@ Landing page con catálogo de cascos y accesorios para motocicletas. Filtrado en
 - **HTMX** 2.0.4 — filtrado en tiempo real (GET-based, sin CSRF)
 - **Tailwind CSS** — CDN, diseño responsivo
 - **Pillow** — manejo de imágenes
-- **Cloudinary** — almacenamiento y CDN de imágenes
-- **django-cloudinary-storage** — storage backend para Django
+- **Pillow** — manejo de imágenes
 
 ## Funcionalidades
 
@@ -138,7 +137,7 @@ Este proyecto se desarrolló siguiendo el flujo **SDD (Spec-Driven Development)*
 
 ## Deploy
 
-### PythonAnywhere + Cloudinary (gratis)
+### PythonAnywhere (gratis)
 
 ```bash
 # 1. Clonar en PythonAnywhere (Bash console)
@@ -149,17 +148,18 @@ pip install -r requirements.txt
 
 # 2. Configurar variables de entorno en el Web tab:
 #    DJANGO_SECRET_KEY, DJANGO_DEBUG=False, DJANGO_ALLOWED_HOSTS
-#    CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET
 
-# 3. Migrar y recolectar estáticos
+# 3. Crear directorio para media files
+mkdir -p media
+
+# 4. Migrar y recolectar estáticos
 python manage.py migrate
 python manage.py collectstatic
 ```
 
 Configurar el **WSGI** apuntando a `config.wsgi.application` y montar **Static files**:
 - `/static/` → `/home/tuuser/catalogo_cascos/staticfiles/`
-
-Las imágenes se almacenan y sirven desde **Cloudinary** automáticamente.
+- `/media/` → `/home/tuuser/catalogo_cascos/media/`
 
 ## Roadmap (ideas para después)
 

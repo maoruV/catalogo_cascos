@@ -8,6 +8,4 @@ dependencies = [
     "django>=6.0.6",
     "django-imagekit>=6.1.0",
     "pillow>=11",
-    "django-cloudinary-storage>=0.3",
-    "cloudinary>=1.41",
 ]

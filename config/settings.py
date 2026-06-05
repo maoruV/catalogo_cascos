@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+
 import os
 from pathlib import Path
 
@@ -48,21 +49,6 @@ INSTALLED_APPS = [
     "catalog",
     "imagekit",
 ]
-
-# Cloudinary (se activa cuando CLOUDINARY_CLOUD_NAME está definido)
-CLOUDINARY_CLOUD_NAME = os.environ.get("CLOUDINARY_CLOUD_NAME")
-if CLOUDINARY_CLOUD_NAME:
-    INSTALLED_APPS.insert(0, "cloudinary_storage")
-    INSTALLED_APPS.append("cloudinary")
-    DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
-
-    import cloudinary as cloudinary_lib
-
-    cloudinary_lib.config(
-        cloud_name=CLOUDINARY_CLOUD_NAME,
-        api_key=os.environ.get("CLOUDINARY_API_KEY"),
-        api_secret=os.environ.get("CLOUDINARY_API_SECRET"),
-    )
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
