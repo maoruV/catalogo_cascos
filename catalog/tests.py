@@ -229,7 +229,7 @@ class ProductListViewTests(TestCase):
         Product.objects.all().delete()
         response = self.client.get(reverse("catalog:product_list"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "no products found")
+        self.assertContains(response, "No se encontraron productos")
         self.assertEqual(len(response.context["product_list"]), 0)
 
     # --- q (text search) ---
@@ -249,7 +249,7 @@ class ProductListViewTests(TestCase):
         response = self.client.get(reverse("catalog:product_list"), {"q": "Zapatillas"})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context["product_list"]), 0)
-        self.assertContains(response, "no products found")
+        self.assertContains(response, "No se encontraron productos")
 
     def test_search_q_with_htmx_header_returns_partial(self):
         """Request with HX-Request header should use the grid partial template."""
@@ -282,7 +282,7 @@ class ProductListViewTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context["product_list"]), 0)
-        self.assertContains(response, "no products found")
+        self.assertContains(response, "No se encontraron productos")
 
     # --- q search by brand ---
 

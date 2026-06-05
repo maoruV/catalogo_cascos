@@ -1,4 +1,7 @@
+import os
+
 from django.db import models
+from django.dispatch import receiver
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFill
 
@@ -41,3 +44,16 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+
+@receiver(models.signals.post_delete, sender=Product)
+def delete_product_image_file(sender, instance, **kwargs):  # noqa: ARG001
+    """Borra el archivo de imagen del disco cuando se elimina un producto.
+
+    Django no limpia automáticamente los archivos subidos al borrar el registro.
+    Este signal se encarga de eliminar la imagen original del disco.
+    Los thumbnails cacheados por django-imagekit quedan huérfanos pero no
+    causan errores — se regeneran si el archivo fuente reaparece.
+    """
+    if instance.image and os.path.isfile(instance.image.path):
+        os.remove(instance.image.path)
