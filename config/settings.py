@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,26 +21,48 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-x66*!#o3xtcv2uq0zt8np!(d(36xluuv8@y#f8iuukoz0l)0=%'
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-x66*!#o3xtcv2uq0zt8np!(d(36xluuv8@y#f8iuukozl0)0=%",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    h.strip()
+    for h in os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+    if h.strip()
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'catalog',
-    'imagekit',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "catalog",
+    "imagekit",
 ]
+
+# Cloudinary (se activa cuando CLOUDINARY_CLOUD_NAME está definido)
+CLOUDINARY_CLOUD_NAME = os.environ.get("CLOUDINARY_CLOUD_NAME")
+if CLOUDINARY_CLOUD_NAME:
+    INSTALLED_APPS.insert(0, "cloudinary_storage")
+    INSTALLED_APPS.append("cloudinary")
+    DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+    import cloudinary as cloudinary_lib
+
+    cloudinary_lib.config(
+        cloud_name=CLOUDINARY_CLOUD_NAME,
+        api_key=os.environ.get("CLOUDINARY_API_KEY"),
+        api_secret=os.environ.get("CLOUDINARY_API_SECRET"),
+    )
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -118,6 +141,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Media files (user-uploaded)
 MEDIA_URL = 'media/'
