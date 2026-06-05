@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Cascos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        midnight: {
+                            50: '#f0f4ff',
+                            100: '#dbe4ff',
+                            200: '#bac8ff',
+                            300: '#91a7ff',
+                            400: '#748ffc',
+                            500: '#5c7cfa',
+                            600: '#4c6ef5',
+                            700: '#364fc7',
+                            800: '#1a2332',
+                            900: '#0f1724',
+                            950: '#080e1a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .img-zoom {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .img-zoom:hover {
+            transform: scale(1.08);
+        }
+
+        .nav-blur {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gradient-to-br from-gray-50 via-white to-gray-100 min-h-screen flex flex-col font-sans antialiased text-gray-900">
+
+    <!-- Navbar -->
+    <nav class="bg-midnight-900 text-white shadow-2xl shadow-black/20 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="{% url 'catalog:product_list' %}" class="flex items-center gap-3 group">
+                    <!-- Helmet icon -->
+                    <svg class="w-8 h-8 text-orange-500 group-hover:text-orange-400 transition-colors" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 2.25c-5.523 0-10 4.477-10 10v2.25c0 1.5 1.5 3 3 3h1.5a.75.75 0 0 0 .75-.75v-4.5a.75.75 0 0 0-.75-.75H5.25a7.5 7.5 0 0 1 14.25-3.75v4.5a.75.75 0 0 0 .75.75h.75c1.5 0 3-1.5 3-3v-2.25c0-5.523-4.477-10-10-10Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 18.75a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5Z" />
+                    </svg>
+                    <span class="text-xl font-extrabold tracking-tight">
+                        <span class="text-white">CATÁLOGO</span>
+                        <span class="text-orange-500">CASCOS</span>
+                    </span>
+                </a>
+                <div class="text-sm text-gray-400 hidden sm:block">
+                    <span class="font-medium text-gray-300">Encuentra tu casco ideal</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-midnight-900 border-t border-midnight-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2 text-gray-400">
+                    <svg class="w-5 h-5 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 2.25c-5.523 0-10 4.477-10 10v2.25c0 1.5 1.5 3 3 3h1.5a.75.75 0 0 0 .75-.75v-4.5a.75.75 0 0 0-.75-.75H5.25a7.5 7.5 0 0 1 14.25-3.75v4.5a.75.75 0 0 0 .75.75h.75c1.5 0 3-1.5 3-3v-2.25c0-5.523-4.477-10-10-10Z" />
+                    </svg>
+                    <span class="text-sm">&copy; 2026 Catálogo de Cascos</span>
+                </div>
+                <div class="flex items-center gap-6 text-sm text-gray-500">
+                    <span class="hover:text-gray-300 transition-colors cursor-default">Todos los derechos
+                        reservados</span>
+                    <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

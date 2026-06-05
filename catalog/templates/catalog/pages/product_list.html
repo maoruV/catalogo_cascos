@@ -1,0 +1,30 @@
+{% extends "catalog/base.html" %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6">
+    <div>
+        <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Catálogo</h1>
+        <p class="text-sm text-gray-500 mt-1">
+            {% if page_obj %}
+            {{ page_obj.paginator.count }} producto{{ page_obj.paginator.count|pluralize }}
+            {% endif %}
+        </p>
+    </div>
+</div>
+
+<!-- Search -->
+<div class="mb-4">
+    {% include "catalog/partials/_search_bar.html" %}
+</div>
+
+<!-- Filters -->
+<div class="mb-6">
+    {% include "catalog/partials/_filters.html" %}
+</div>
+
+<!-- Product Grid -->
+<div id="product-grid">
+    {% include "catalog/partials/_product_grid.html" %}
+</div>
+{% endblock %}
