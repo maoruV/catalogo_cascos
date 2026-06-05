@@ -9,8 +9,9 @@ Landing page con catálogo de cascos y accesorios para motocicletas. Filtrado en
 - **SQLite** (via ORM)
 - **HTMX** 2.0.4 — filtrado en tiempo real (GET-based, sin CSRF)
 - **Tailwind CSS** — CDN, diseño responsivo
-- **Pillow** 12.2.0 — manejo de imágenes
-- **uv** — gestor de dependencias
+- **Pillow** — manejo de imágenes
+- **Cloudinary** — almacenamiento y CDN de imágenes
+- **django-cloudinary-storage** — storage backend para Django
 
 ## Funcionalidades
 
@@ -51,26 +52,27 @@ Landing page con catálogo de cascos y accesorios para motocicletas. Filtrado en
 
 ## Quick start
 
+Con **uv** (recomendado):
+
 ```bash
-# Clonar
 git clone <repo>
 cd catalogo_cascos
-
-# Crear entorno y activar
-uv venv
-.venv\Scripts\activate  # Windows
-source .venv/bin/activate  # Linux/Mac
-
-# Instalar dependencias
+uv venv && source .venv/bin/activate  # o .venv\Scripts\activate en Windows
 uv sync
-
-# Migrar base de datos
 python manage.py migrate
-
-# Crear superusuario
 python manage.py createsuperuser
+python manage.py runserver
+```
 
-# Correr servidor de desarrollo
+Con **pip**:
+
+```bash
+git clone <repo>
+cd catalogo_cascos
+python -m venv .venv && source .venv/bin/activate  # o .venv\Scripts\activate en Windows
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py createsuperuser
 python manage.py runserver
 ```
 
@@ -114,8 +116,11 @@ catalogo_cascos/
 │   ├── specs/                   # Especificaciones fuente
 │   └── changes/archive/         # Cambios completados
 ├── media/                       # Imágenes subidas (en dev)
+├── staticfiles/                 # Archivos estáticos recolectados (collectstatic)
 ├── manage.py
 ├── pyproject.toml
+├── requirements.txt
+├── .env.example                 # Template de variables de entorno
 └── README.md
 ```
 
@@ -131,11 +136,34 @@ Este proyecto se desarrolló siguiendo el flujo **SDD (Spec-Driven Development)*
 6. **Verificación** — 43 tests, PASS WITH WARNINGS
 7. **Archivo** — specs mergeadas a la fuente de verdad
 
+## Deploy
+
+### PythonAnywhere + Cloudinary (gratis)
+
+```bash
+# 1. Clonar en PythonAnywhere (Bash console)
+git clone <repo>
+cd catalogo_cascos
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+
+# 2. Configurar variables de entorno en el Web tab:
+#    DJANGO_SECRET_KEY, DJANGO_DEBUG=False, DJANGO_ALLOWED_HOSTS
+#    CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET
+
+# 3. Migrar y recolectar estáticos
+python manage.py migrate
+python manage.py collectstatic
+```
+
+Configurar el **WSGI** apuntando a `config.wsgi.application` y montar **Static files**:
+- `/static/` → `/home/tuuser/catalogo_cascos/staticfiles/`
+
+Las imágenes se almacenan y sirven desde **Cloudinary** automáticamente.
+
 ## Roadmap (ideas para después)
 
 - [ ] Carrito de compras y checkout
 - [ ] Slugs / URLs amigables para SEO
-- [ ] Cloud storage para imágenes (S3/Cloudinary)
 - [ ] Pytest + pytest-django + coverage
 - [ ] Ruff (linter + formatter)
-- [ ] Deploy con instrucciones para producción
